@@ -58,7 +58,7 @@ data DbfFieldDescriptor = DbfFieldDescriptor
 dbfRecLengthForFields fields = 1 + sum (map dbfFieldLength fields)
 
 putDbfFieldName bs 
-    | len > maxLen  = fail ("putDbfFieldName: Field name too long (" ++ show len ++ " bytes)")
+    | len > maxLen  = error ("putDbfFieldName: Field name too long (" ++ show len ++ " bytes)")
     | otherwise = do
         putLazyByteString bs
         putLazyByteString (BS.replicate (maxLen-len) 0)
@@ -217,4 +217,4 @@ getDbfFile = do
     hdr <- getDbfFileHeader
     recs <- unfoldM (getDbfRecord (fromIntegral (dbfFileRecLength hdr)))
     return (hdr, recs)
-    
+
